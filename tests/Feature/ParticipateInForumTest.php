@@ -9,23 +9,17 @@ class ParticipateInForumTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testAnUnauthenticatedUserMayNotAddReplies()
+    public function testUnauthenticatedUserMayNotAddReplies()
     {
-        $this->withoutExceptionHandling()->expectException('Illuminate\Auth\AuthenticationException');
-        $thread = factory('App\Thread')->create();
+        $thread = create('App\Thread');
 
-        $reply = make('App\Reply');
-
-        $this->post($thread->path() . '/replies', $reply->toArray());
-
-        $this->get($thread->path())
-            ->assertSee($reply->body);
+        $this->post($thread->path() . '/replies', [])
+            ->assertRedirect('/login');
     }
 
     public function testAnAuthenticatedUserMayParticipateInForumThread()
     {
-        $this->withoutExceptionHandling();
-        $this->be($user = create('App\User'));
+        $this->signIn();
 
         $thread = create('App\Thread');
 
@@ -35,6 +29,17 @@ class ParticipateInForumTest extends TestCase
 
         $this->get($thread->path())
             ->assertSee($reply->body);
+    }
 
+    public function testAReplyRequiresABody()
+    {
+        $this->signIn();
+
+        $thread = create('App\Thread');
+
+        $reply = make('App\Reply', ['body' => null]);
+
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertSessionHasErrors('body');
     }
 }
