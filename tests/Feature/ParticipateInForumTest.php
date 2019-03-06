@@ -14,7 +14,7 @@ class ParticipateInForumTest extends TestCase
         $this->withoutExceptionHandling()->expectException('Illuminate\Auth\AuthenticationException');
         $thread = factory('App\Thread')->create();
 
-        $reply = factory('App\Reply')->make();
+        $reply = make('App\Reply');
 
         $this->post($thread->path() . '/replies', $reply->toArray());
 
@@ -25,11 +25,11 @@ class ParticipateInForumTest extends TestCase
     public function testAnAuthenticatedUserMayParticipateInForumThread()
     {
         $this->withoutExceptionHandling();
-        $this->be($user = factory('App\User')->create());
+        $this->be($user = create('App\User'));
 
-        $thread = factory('App\Thread')->create();
+        $thread = create('App\Thread');
 
-        $reply = factory('App\Reply')->make();
+        $reply = make('App\Reply');
 
         $this->post($thread->path() . '/replies', $reply->toArray());
 
