@@ -18,6 +18,7 @@ class ReadThreadsTest extends TestCase
 
     public function testAUserCanBrowseThreads()
     {
+        $this->withoutExceptionHandling();
         $response = $this->get('/threads')
             ->assertSee($this->thread->title);
     }
@@ -50,6 +51,7 @@ class ReadThreadsTest extends TestCase
 
     public function testAUserCanFilterThreadsByAnyUsername()
     {
+        $this->withoutExceptionHandling();
         $this->signIn(create('App\User', ['name' => 'JohnDoe']));
 
         $threadByJohn = create('App\Thread', ['user_id' => auth()->id()]);
