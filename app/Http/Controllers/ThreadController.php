@@ -16,18 +16,21 @@ class ThreadController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
      */
     public function index(Channel $channel, ThreadFilters $filters)
     {
         $threads = $this->getThreads($channel, $filters);
+
+        if (request()->wantsJson()) {
+            return $threads;
+        }
+
         return view('threads.index', compact('threads'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -37,8 +40,6 @@ class ThreadController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -60,19 +61,18 @@ class ThreadController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Thread  $thread
-     * @return \Illuminate\Http\Response
      */
     public function show($channelId, Thread $thread)
     {
-        return view('threads.show', compact('thread'));
+        return view('threads.show', [
+            'thread' => $thread,
+            'replies' => $thread->replies()->latest()->paginate(5),
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Thread  $thread
-     * @return \Illuminate\Http\Response
      */
     public function edit(Thread $thread)
     {
@@ -82,9 +82,6 @@ class ThreadController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Thread  $thread
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Thread $thread)
     {
@@ -94,8 +91,6 @@ class ThreadController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Thread  $thread
-     * @return \Illuminate\Http\Response
      */
     public function destroy(Thread $thread)
     {
@@ -104,14 +99,13 @@ class ThreadController extends Controller
 
     public function getThreads($channel, $filters)
     {
-        $threads = Thread::latest();
+        $threads = Thread::latest()->filter($filters);
 
         if ($channel->exists) {
             $threads = $threads->where('channel_id', $channel->id);
         }
 
-        $threads = $threads->filter($filters)->get();
+        return $threads->get();
 
-        return $threads;
     }
 }
