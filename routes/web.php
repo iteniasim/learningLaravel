@@ -24,3 +24,5 @@ Route::resource('/threads', 'ThreadController')->except(['show']);
 Route::get('/threads/{channel}', 'ThreadController@index')->name('threads.ch.index');
 
 Route::post('/threads/{channel}/{thread}/replies', 'ReplyController@store')->name('replies.store');
+
+Route::post('/replies/{reply}/favourites', 'FavouritesController@store')->name('favourites.reply');
