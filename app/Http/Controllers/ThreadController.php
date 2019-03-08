@@ -14,10 +14,7 @@ class ThreadController extends Controller
     {
         $this->middleware('auth')->except(['index', 'show']);
     }
-    /**
-     * Display a listing of the resource.
-     *
-     */
+
     public function index(Channel $channel, ThreadFilters $filters)
     {
         $threads = $this->getThreads($channel, $filters);
@@ -29,19 +26,11 @@ class ThreadController extends Controller
         return view('threads.index', compact('threads'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     */
     public function create()
     {
         return view('threads.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     */
     public function store(Request $request)
     {
         $this->validate(request(), [
@@ -59,10 +48,6 @@ class ThreadController extends Controller
         return redirect($thread->path());
     }
 
-    /**
-     * Display the specified resource.
-     *
-     */
     public function show($channel, Thread $thread)
     {
         return view('threads.show', [
@@ -71,31 +56,22 @@ class ThreadController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     */
     public function edit(Thread $thread)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     */
     public function update(Request $request, Thread $thread)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     */
     public function destroy($channel, Thread $thread)
     {
+        $this->authorize('update', $thread);
+
         $thread->delete();
+
         return redirect('/threads');
     }
 

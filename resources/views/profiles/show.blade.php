@@ -16,7 +16,7 @@
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
                         <div>
-                            {{ $thread->title }}
+                            <a href="{{ $thread->path() }}">{{ $thread->title }}</a>
                         </div>
                         <div>
                             Posted by: <a href="{{ route('profile.show', $thread->owner) }}">{{ $thread->owner->name }}</a>

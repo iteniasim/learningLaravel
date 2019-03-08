@@ -18,7 +18,8 @@
                 <div class="card-body">
                     {{ $thread->body }}
                 </div>
-                @if (auth()->check())
+
+                @can('update', $thread)
                 <div class="d-flex justify-content-end pr-4">
                     <form method="POST" action="{{ $thread->path() }}">
                         @csrf
@@ -28,10 +29,8 @@
                         </div>
                     </form>
                 </div>
-                @endif
+                @endcan
             </div>
-
-
 
             <br>
 
