@@ -6,22 +6,32 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <a href="">
-                        {{ $thread->owner->name }}
-                    </a> posted:
-                    {{ $thread->title }}
-                </div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                    <div class="alert alert-success" role="alert">
-                        {{ session('status') }}
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            {{ $thread->title }}
+                        </div>
+                        <div>
+                            Posted by: <a href="{{ route('profile.show', $thread->owner) }}">{{ $thread->owner->name }}</a>
+                        </div>
                     </div>
-                    @endif
-
+                </div>
+                <div class="card-body">
                     {{ $thread->body }}
                 </div>
+                @if (auth()->check())
+                <div class="d-flex justify-content-end pr-4">
+                    <form method="POST" action="{{ $thread->path() }}">
+                        @csrf
+                        @method('DELETE')
+                        <div class="form-group">
+                            <button type="Submit" class="btn btn-danger">Delete</button>
+                        </div>
+                    </form>
+                </div>
+                @endif
             </div>
+
+
 
             <br>
 
@@ -58,7 +68,7 @@
                 <div class="card-body">
                     This Thread was published at {{ $thread->created_at->diffForHumans() }}
                     by
-                    <a href="#">
+                    <a href="{{ route('profile.show', $thread->owner) }}">
                         {{ $thread->owner->name }}
                     </a>, and currently has {{ $thread->replies_count }}
                     {{ str_plural('comment',$thread->replies_count)}}.

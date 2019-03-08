@@ -63,7 +63,7 @@ class ThreadController extends Controller
      * Display the specified resource.
      *
      */
-    public function show($channelId, Thread $thread)
+    public function show($channel, Thread $thread)
     {
         return view('threads.show', [
             'thread' => $thread,
@@ -93,9 +93,10 @@ class ThreadController extends Controller
      * Remove the specified resource from storage.
      *
      */
-    public function destroy(Thread $thread)
+    public function destroy($channel, Thread $thread)
     {
-        //
+        $thread->delete();
+        return redirect('/threads');
     }
 
     public function getThreads($channel, $filters)
