@@ -8,28 +8,18 @@
                 <div class="h1">{{ $profileUser->name }}</div> &nbsp Created &nbsp
                 <div>{{ $profileUser->created_at->diffForHumans() }}</div>
             </div>
-
             <hr>
-
-            @foreach ($threads as $thread)
-            <div class="card">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <a href="{{ $thread->path() }}">{{ $thread->title }}</a>
-                        </div>
-                        <div>
-                            Posted by: <a href="{{ route('profile.show', $thread->owner) }}">{{ $thread->owner->name }}</a>
-                            {{ $thread->created_at->diffForHumans() }}
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    {{ $thread->body }}
-                </div>
+            @forelse ($activities as $date => $activity)
+            <div class="pb-2 mt-4 mb-2 border-bottom">
+                {{ $date }}
             </div>
+            @foreach ($activity as $record)
+            @include("profiles.activities.{$record->type}", ['activity' => $record])
             @endforeach
-            {{ $threads->links() }}
+            @empty
+            Threa are no threads by this User.
+            @endforelse
+            {{-- {{ $threads->links() }} --}}
         </div>
     </div>
 </div>
