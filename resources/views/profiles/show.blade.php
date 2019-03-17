@@ -19,7 +19,7 @@
             @endif
             @endforeach
             @empty
-            Threa are no threads by this User.
+            There is no activity for this user yet.
             @endforelse
         </div>
     </div>
