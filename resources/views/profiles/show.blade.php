@@ -14,12 +14,13 @@
                 {{ $date }}
             </div>
             @foreach ($activity as $record)
+            @if (view()->exists("profiles.activities.{$record->type}"))
             @include("profiles.activities.{$record->type}", ['activity' => $record])
+            @endif
             @endforeach
             @empty
             Threa are no threads by this User.
             @endforelse
-            {{-- {{ $threads->links() }} --}}
         </div>
     </div>
 </div>

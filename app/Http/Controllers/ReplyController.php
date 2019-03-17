@@ -14,33 +14,7 @@ class ReplyController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store($channelId, Thread $thread)
+    public function store($channel, Thread $thread)
     {
         $this->validate(request(), ['body' => 'required']);
         $thread->addReply([
@@ -48,29 +22,7 @@ class ReplyController extends Controller
             'user_id' => auth()->id(),
         ]);
 
-        return back();
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Reply  $reply
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Reply $reply)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Reply  $reply
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Reply $reply)
-    {
-        //
+        return back()->with('flash', 'Your Reply Was Published');
     }
 
     /**
@@ -82,7 +34,8 @@ class ReplyController extends Controller
      */
     public function update(Request $request, Reply $reply)
     {
-        //
+        $this->authorize('update', $reply);
+        $reply->update(['body' => request('body')]);
     }
 
     /**
@@ -93,6 +46,13 @@ class ReplyController extends Controller
      */
     public function destroy(Reply $reply)
     {
-        //
+        $this->authorize('update', $reply);
+        $reply->delete();
+
+        if (request()->wantsJson()) {
+            return response(['status' => 'Your reply has been deleted.']);
+        }
+
+        return back();
     }
 }
