@@ -27,6 +27,21 @@ class FavouritesTest extends TestCase
         $this->assertCount(1, $reply->favourites);
     }
 
+    public function testAnAuthenticatedUserCanUnfavouriteFavouritedReply()
+    {
+        $this->signIn()->withoutExceptionHandling();
+
+        $reply = create('App\Reply');
+
+        $reply->favourite();
+
+        $this->delete('/replies/' . $reply->id . '/favourites');
+
+        $reply->unfavourite();
+
+        $this->assertDatabaseHas('threads', ['id' => $reply->thread->id]);
+    }
+
     public function testAnAuthenticatedUserCanFavouriteAReplyOnlyOnce()
     {
         $this->withoutExceptionHandling();

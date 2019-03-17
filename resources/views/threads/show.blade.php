@@ -46,7 +46,7 @@
                 <form action="{{ $thread->path(). '/replies' }}" method="POST">
                     @csrf
                     <div class="form-group">
-                        <lable for="body">Body:</lable>
+                        Body:
                         <textarea name="body" id="body" class="form-control" rows="5"></textarea>
                     </div>
                     <div class="d-flex justify-content-end">

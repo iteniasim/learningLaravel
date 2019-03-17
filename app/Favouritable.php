@@ -18,9 +18,23 @@ trait Favouritable
         }
     }
 
+    public function unfavourite()
+    {
+        $attributes = ['user_id' => auth()->id()];
+
+        if (($this->favourites()->where($attributes)->exists())) {
+            $this->favourites()->where($attributes)->delete();
+        }
+    }
+
     public function isFavourited()
     {
         return !!$this->favourites->where('user_id', auth()->id())->count();
+    }
+
+    public function getIsFavouritedAttribute()
+    {
+        return $this->isFavourited();
     }
 
     public function getFavouritesCountAttribute()

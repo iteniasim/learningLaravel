@@ -1,4 +1,5 @@
 <script>
+import FavouriteComponent from "./FavouriteComponent.vue";
 export default {
   props: ["attributes"],
 
@@ -7,6 +8,10 @@ export default {
       editing: false,
       body: this.attributes.body
     };
+  },
+
+  components: {
+    "favourite-component": FavouriteComponent
   },
 
   methods: {
