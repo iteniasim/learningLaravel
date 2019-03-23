@@ -24,6 +24,11 @@ Vue.component(
     require("./components/FlashComponent.vue").default
 );
 
+Vue.component(
+    "paginator-component",
+    require("./components/PaginatorComponent.vue").default
+);
+
 Vue.component("thread-view", require("./pages/ThreadComponent.vue").default);
 
 /**

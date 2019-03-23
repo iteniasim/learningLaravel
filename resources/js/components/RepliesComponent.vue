@@ -4,8 +4,10 @@
       <reply-component :data="reply" @deleted="remove(index)"></reply-component>
     </div>
 
+    <paginator-component :dataSet="dataSet" @changed="fetch"></paginator-component>
+
     <div>
-      <new-reply-component :endpoint="endpoint" @created="add"></new-reply-component>
+      <new-reply-component @created="add"></new-reply-component>
     </div>
   </div>
 </template>
@@ -17,16 +19,21 @@
 <script>
 import ReplyComponentVue from "./ReplyComponent.vue";
 import NewReplyComponentVue from "./NewReplyComponent.vue";
+import Collection from "../mixins/Collection.js";
 
 export default {
-  props: ["data"],
-
   data() {
     return {
-      items: this.data,
-      endpoint: location.pathname + "/replies"
+      dataSet: false,
+      items: []
     };
   },
+
+  created() {
+    this.fetch();
+  },
+
+  mixins: [Collection],
 
   components: {
     "reply-component": ReplyComponentVue,
@@ -34,16 +41,22 @@ export default {
   },
 
   methods: {
-    add(reply) {
-      this.items.push(reply);
-      this.$emit("added");
+    fetch(page) {
+      axios.get(this.url(page)).then(this.refresh);
     },
-    remove(index) {
-      this.items.splice(index, 1);
 
-      this.$emit("removed");
+    url(page) {
+      if (!page) {
+        let query = location.search.match(/page=(\d+)/);
 
-      flash("Reply was deleted.");
+        page = query ? query[1] : 1;
+      }
+
+      return location.pathname + "/replies?page=" + page;
+    },
+    refresh({ data }) {
+      this.dataSet = data;
+      this.items = data.data;
     }
   }
 };
