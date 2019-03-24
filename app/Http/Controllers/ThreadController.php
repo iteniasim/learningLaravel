@@ -72,7 +72,7 @@ class ThreadController extends Controller
         return redirect('/threads');
     }
 
-    public function getThreads($channel, $filters)
+    public function getThreads(Channel $channel, ThreadFilters $filters)
     {
         $threads = Thread::latest()->filter($filters);
 

@@ -14,8 +14,8 @@
 
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-                        aria-expanded="false">Browse</a>
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                        aria-haspopup="true" aria-expanded="false">Browse</a>
 
                     <div class="dropdown-menu">
                         <a class="nav-link" href="/threads">All Threads</a>
@@ -23,6 +23,7 @@
                         <a class="nav-link" href="/threads?by={{ auth()->user()->name }}">My Threads</a>
                         @endif
                         <a class="nav-link" href="/threads?popular=1">Popular Threads</a>
+                        <a class="nav-link" href="/threads?unanswered=1">Unanswered Threads</a>
                     </div>
 
                 </li>
@@ -32,8 +33,8 @@
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-                        aria-expanded="false">Channels</a>
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                        aria-haspopup="true" aria-expanded="false">Channels</a>
 
                     <div class="dropdown-menu">
                         @foreach ($channels as $channel)
@@ -59,8 +60,8 @@
                 @endif
                 @else
                 <li class="nav-item dropdown">
-                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false" v-pre>
+                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                         {{ Auth::user()->name }} <span class="caret"></span>
                     </a>
 

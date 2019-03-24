@@ -61,6 +61,15 @@ class ReadThreadsTest extends TestCase
             ->assertDontSee($threadNotByJohn->title);
     }
 
+    public function testAUserCanGetAllRepliesForAGivenThread()
+    {
+        $thread = create('App\Thread');
+        create('App\Reply', ['thread_id' => $thread->id], 20);
+        $response = $this->getJson($thread->path() . '/replies')->json();
+        $this->assertCount(10, $response['data']);
+        $this->assertEquals(20, $response['total']);
+    }
+
     public function testAUserCanFilterThreadsByPopularity()
     {
         $threadWithNoReplies = $this->thread;
@@ -75,12 +84,13 @@ class ReadThreadsTest extends TestCase
         $this->assertEquals([3, 2, 0], array_column($response, 'replies_count'));
     }
 
-    public function testAUserCanGetAllRepliesForAGivenThread()
+    public function testAUserCanFilterThreadsByUnansweredThreads()
     {
-        $thread = create('App\Thread');
-        create('App\Reply', ['thread_id' => $thread->id], 3);
-        $response = $this->getJson($thread->path() . '/replies')->json();
-        $this->assertCount(1, $response['data']);
-        $this->assertEquals(2, $response['total']);
+        $threadWithNoReplies = $this->thread;
+        $threadWithReplies = create('App\Thread');
+        $reply = create('App\Reply', ['thread_id' => $threadWithReplies->id]);
+
+        $response = $this->getJson('threads?unanswered=1')->json();
+        $this->assertCount(1, $response);
     }
 }

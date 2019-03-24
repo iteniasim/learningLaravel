@@ -29,6 +29,7 @@ class ParticipateInForumTest extends TestCase
 
         $this->get($thread->path())
             ->assertSee($reply->body);
+        $this->assertEquals(1, $thread->fresh()->replies_count);
     }
 
     public function testAReplyRequiresABody()
@@ -59,8 +60,10 @@ class ParticipateInForumTest extends TestCase
         $this->signIn();
 
         $reply = create('App\Reply', ['user_id' => auth()->id()]);
+        $this->assertEquals(1, $reply->thread->replies_count);
 
         $this->delete("/replies/{$reply->id}")->assertStatus(302);
+        $this->assertEquals(0, $reply->thread->fresh()->replies_count);
 
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
     }
