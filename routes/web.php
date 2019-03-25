@@ -30,7 +30,7 @@ Route::delete('replies/{reply}', 'ReplyController@destroy')->name('replies.destr
 Route::patch('replies/{reply}', 'ReplyController@update')->name('replies.update');
 
 Route::post('/threads/{channel}/{thread}/subscribe', 'SubscriptionController@store')->middleware('auth');
-Route::delete('/threads/{channel}/{thread}/unsubscribe', 'SubscriptionController@destroy')->middleware('auth');
+Route::delete('/threads/{channel}/{thread}/subscribe', 'SubscriptionController@destroy')->middleware('auth');
 
 Route::post('/replies/{reply}/favourites', 'FavouritesController@store');
 Route::delete('/replies/{reply}/favourites', 'FavouritesController@destroy');

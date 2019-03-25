@@ -52,6 +52,8 @@
                         {{ str_plural('comment',$thread->replies_count)}}.
                     </div>
                 </div>
+
+                <subscribe-button :status="{{ json_encode($thread->isSubscribedTo) }}"></subscribe-button>
             </div>
 
         </div>

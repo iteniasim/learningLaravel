@@ -12,7 +12,7 @@ class SubscriptionController extends Controller
         $thread->subscribe();
     }
 
-    public function destroy(Thread $thread)
+    public function destroy($channel, Thread $thread)
     {
         $thread->unsubscribe();
     }
