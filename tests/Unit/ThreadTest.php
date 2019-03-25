@@ -61,7 +61,7 @@ class ThreadTest extends TestCase
         );
     }
 
-    public function testAThreadCanBeUnSubscribedFrom()
+    public function testAThreadCanBeUnsubscribedFrom()
     {
         $thread = create('App\Thread');
 

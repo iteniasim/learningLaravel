@@ -58,7 +58,7 @@ class Thread extends Model
         ]);
     }
 
-    public function unSubscribe($userId = null)
+    public function unsubscribe($userId = null)
     {
         $this->subscriptions()
             ->where('user_id', $userId ?: auth()->id())
