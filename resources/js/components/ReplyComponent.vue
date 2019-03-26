@@ -3,7 +3,7 @@
     <div class="card-header">
       <div class="d-flex justify-content-between">
         <div>
-          <a href="'/profiles/'+data.owner.name">{{ data.owner.name }}</a>
+          <a :href="'/profiles/'+data.owner.name">{{ data.owner.name }}</a>
           said
           <span v-text="ago"></span>
         </div>

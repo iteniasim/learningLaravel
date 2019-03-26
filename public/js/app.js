@@ -55807,7 +55807,7 @@ var render = function() {
     _c("div", { staticClass: "card-header" }, [
       _c("div", { staticClass: "d-flex justify-content-between" }, [
         _c("div", [
-          _c("a", { attrs: { href: "'/profiles/'+data.owner.name" } }, [
+          _c("a", { attrs: { href: "/profiles/" + _vm.data.owner.name } }, [
             _vm._v(_vm._s(_vm.data.owner.name))
           ]),
           _vm._v("\n        said\n        "),
