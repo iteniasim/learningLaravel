@@ -53,7 +53,9 @@
                     </div>
                 </div>
 
+                @auth
                 <subscribe-button :status="{{ json_encode($thread->isSubscribedTo) }}"></subscribe-button>
+                @endauth
             </div>
 
         </div>
