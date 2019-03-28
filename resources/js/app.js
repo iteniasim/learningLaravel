@@ -25,6 +25,11 @@ Vue.component(
 );
 
 Vue.component(
+    "user-notifications",
+    require("./components/UserNotificationsComponent.vue").default
+);
+
+Vue.component(
     "paginator-component",
     require("./components/PaginatorComponent.vue").default
 );

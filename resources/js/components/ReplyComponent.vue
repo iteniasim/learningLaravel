@@ -1,5 +1,5 @@
 <template>
-  <div id="'reply-'+data.id" class="card">
+  <div :id="'reply-'+data.id" class="card">
     <div class="card-header">
       <div class="d-flex justify-content-between">
         <div>
