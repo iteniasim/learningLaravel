@@ -4,16 +4,22 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Notifications\DatabaseNotification;
 use Tests\TestCase;
 
 class NotificationsTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->signIn();
+    }
+
     public function testANotificationIsPreparedWhenASubscribedThreadReceivesAReplyThatIsNotByTheCurrentUser()
     {
-        $this->signIn();
-
         $thread = create('App\Thread');
 
         $thread->subscribe();
@@ -37,31 +43,15 @@ class NotificationsTest extends TestCase
 
     public function testAUserCanFetchTheirUnreadNotificaitons()
     {
-        $this->signIn()->withoutExceptionHandling();
-        $thread = create('App\Thread');
-        $thread->subscribe();
+        create(DatabaseNotification::class);
 
-        $thread->addReply([
-            'user_id' => create('App\User')->id,
-            'body'    => 'some reply',
-        ]);
-
-        $user = auth()->user();
-
-        $response = $this->getJson("/profiles/{$user->name}/notifications")->json();
+        $response = $this->getJson("/profiles/" . auth()->user()->name . "/notifications")->json();
         $this->assertCount(1, $response);
     }
 
     public function testAUserCanMarkANotificationAsRead()
     {
-        $this->signIn()->withoutExceptionHandling();
-        $thread = create('App\Thread');
-        $thread->subscribe();
-
-        $thread->addReply([
-            'user_id' => create('App\User')->id,
-            'body'    => 'some reply',
-        ]);
+        create(DatabaseNotification::class);
 
         $user = auth()->user();
 

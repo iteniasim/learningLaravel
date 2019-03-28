@@ -23,7 +23,7 @@ export default {
 
   methods: {
     subscribe() {
-      axios[this.active ? "delete" : "post"](location.pathname + "/subscribe");
+      axios[this.active ? "delete" : "post"](location.pathname + "/subscription");
       this.active = !this.active;
     }
   }
