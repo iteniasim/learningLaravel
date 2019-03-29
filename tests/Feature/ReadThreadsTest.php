@@ -19,30 +19,32 @@ class ReadThreadsTest extends TestCase
     public function testAUserCanBrowseThreads()
     {
         $this->withoutExceptionHandling();
-        $response = $this->get('/threads')
+        $this->get('/threads')
             ->assertSee($this->thread->title);
     }
 
     public function testAUserCanReadASingleThread()
     {
-        $response = $this->get($this->thread->path())
+        $this->withoutExceptionHandling();
+        $this->get($this->thread->path())
             ->assertSee($this->thread->title);
     }
 
     public function testAUserCanReadRepliesThatAreAssociatedWithAThread()
     {
+        $this->withoutExceptionHandling();
         $reply = factory('App\Reply')
             ->create(['thread_id' => $this->thread->id]);
 
-        $response = $this->get($this->thread->path())
+        $this->get($this->thread->path())
             ->assertSee($reply->body);
     }
 
     public function testAUserCanFilterThreadsAccordingToChannel()
     {
         $this->withoutExceptionHandling();
-        $channel = create('App\Channel');
-        $threadInChannel = create('App\Thread', ['channel_id' => $channel->id]);
+        $channel            = create('App\Channel');
+        $threadInChannel    = create('App\Thread', ['channel_id' => $channel->id]);
         $threadNotInChannel = create('App\Thread');
         $this->get('/threads/' . $channel->slug)
             ->assertSee($threadInChannel->title)
@@ -54,7 +56,7 @@ class ReadThreadsTest extends TestCase
         $this->withoutExceptionHandling();
         $this->signIn(create('App\User', ['name' => 'JohnDoe']));
 
-        $threadByJohn = create('App\Thread', ['user_id' => auth()->id()]);
+        $threadByJohn    = create('App\Thread', ['user_id' => auth()->id()]);
         $threadNotByJohn = create('App\Thread');
         $this->get('/threads?by=JohnDoe')
             ->assertSee($threadByJohn->title)
@@ -87,8 +89,8 @@ class ReadThreadsTest extends TestCase
     public function testAUserCanFilterThreadsByUnansweredThreads()
     {
         $threadWithNoReplies = $this->thread;
-        $threadWithReplies = create('App\Thread');
-        $reply = create('App\Reply', ['thread_id' => $threadWithReplies->id]);
+        $threadWithReplies   = create('App\Thread');
+        $reply               = create('App\Reply', ['thread_id' => $threadWithReplies->id]);
 
         $response = $this->getJson('threads?unanswered=1')->json();
         $this->assertCount(1, $response);
