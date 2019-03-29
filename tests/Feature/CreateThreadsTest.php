@@ -24,7 +24,7 @@ class CreateThreadsTest extends TestCase
         $this->withoutExceptionHandling();
         $this->signIn();
 
-        $thread = make('App\Thread');
+        $thread   = make('App\Thread');
         $response = $this->post('/threads', $thread->toArray());
 
         $this->get($response->headers->get('Location'))
@@ -68,13 +68,13 @@ class CreateThreadsTest extends TestCase
 
     }
 
-    public function testAuthorizedUsersCanDeleteThreads()
+    public function testAuthorizedUsersCanDeleteThreadsAndCascadeAllReplies()
     {
         $this->withoutExceptionHandling();
         $this->signIn();
 
         $thread = create('App\Thread', ['user_id' => auth()->id()]);
-        $reply = create('App\Reply', ['thread_id' => $thread->id]);
+        $reply  = create('App\Reply', ['thread_id' => $thread->id]);
 
         $this->delete($thread->path())
             ->assertRedirect('/threads');
@@ -83,6 +83,18 @@ class CreateThreadsTest extends TestCase
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
 
         $this->assertEquals(0, Activity::count());
+    }
+
+    public function testAThreadWhoseTitleContainsSpamMayNotBeCreated()
+    {
+        $this->publishThreads(['title' => 'aaaaaaaaaaaaa'])
+            ->assertSessionHasErrors('title');
+    }
+
+    public function testAThreadWhoseBodyContainsSpamMayNotBeCreated()
+    {
+        $this->publishThreads(['body' => 'aaaaaaaaaaaaa'])
+            ->assertSessionHasErrors('body');
     }
 
     public function publishThreads($overrides = [])

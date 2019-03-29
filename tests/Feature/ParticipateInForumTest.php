@@ -41,7 +41,7 @@ class ParticipateInForumTest extends TestCase
         $reply = make('App\Reply', ['body' => null]);
 
         $this->post($thread->path() . '/replies', $reply->toArray())
-            ->assertSessionHasErrors('body');
+            ->assertStatus(422);
     }
 
     public function testAnUnauthenticatedUsersCannotDeleteReplies()
@@ -84,10 +84,34 @@ class ParticipateInForumTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $this->signIn();
-        $reply = create('App\Reply', ['user_id' => auth()->id()]);
+        $reply        = create('App\Reply', ['user_id' => auth()->id()]);
         $updatedReply = 'You have been changed, fool.';
         $this->patch("/replies/{$reply->id}", ['body' => $updatedReply]);
         $this->assertDatabaseHas('replies', ['id' => $reply->id, 'body' => $updatedReply]);
+    }
+
+    public function testAReplyThatContainsSpamCannotBeCreated()
+    {
+        $this->signIn()->withExceptionHandling();
+        $thread = create('App\Thread');
+        $reply  = make('App\Reply', [
+            'body' => 'spammmmmmmm',
+        ]);
+
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertStatus(422);
+    }
+
+    public function testAReplyThatContainsSpamCannotBeUpdated()
+    {
+        $this->signIn()->withExceptionHandling();
+        $thread = create('App\Thread');
+        $reply  = create('App\Reply', ['user_id' => auth()->id()]);
+
+        $this->patch("/replies/{$reply->id}", [
+            'user_id' => auth()->id(),
+            'body'    => 'spammmmmm',
+        ])->assertStatus(422);
     }
 
 }

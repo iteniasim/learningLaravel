@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Reply;
+use App\Rules\SpamFree;
 use App\Thread;
 use Illuminate\Http\Request;
 
@@ -21,11 +22,20 @@ class ReplyController extends Controller
 
     public function store($channel, Thread $thread)
     {
-        $this->validate(request(), ['body' => 'required']);
-        $reply = $thread->addReply([
-            'body' => request('body'),
-            'user_id' => auth()->id(),
-        ]);
+        try {
+            request()->validate([
+                'body' => ['required', new SpamFree],
+            ]);
+
+            $reply = $thread->addReply([
+                'body'    => request('body'),
+                'user_id' => auth()->id(),
+            ]);
+        } catch (\Exception $e) {
+            return response(
+                'Sorry, Your Reply Could Not Be Saved.', 422
+            );
+        }
 
         if (request()->expectsJson()) {
             return $reply->load('owner');
@@ -44,7 +54,21 @@ class ReplyController extends Controller
     public function update(Request $request, Reply $reply)
     {
         $this->authorize('update', $reply);
-        $reply->update(['body' => request('body')]);
+
+        try {
+            request()->validate([
+                'body' => ['required', new SpamFree],
+            ]);
+
+            $reply->update(['body' => request('body')]);
+
+        } catch (\Exception $e) {
+            return response(
+                'Sorry, Your Reply Could Not Be Updated.',
+                422
+            );
+        }
+
     }
 
     /**
