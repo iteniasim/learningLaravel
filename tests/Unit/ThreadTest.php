@@ -2,7 +2,9 @@
 
 namespace Tests\Unit;
 
+use App\Notifications\ThreadWasUpdated;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class ThreadTest extends TestCase
@@ -36,10 +38,22 @@ class ThreadTest extends TestCase
     public function testAThreadCanAddReply()
     {
         $this->thread->addReply([
-            'body' => 'foobar',
+            'body'    => 'foobar',
             'user_id' => 1,
         ]);
         $this->assertCount(1, $this->thread->replies);
+    }
+
+    public function testAThreadNotifiesItsSubscribersWhenNewRepliesAreAdded()
+    {
+        Notification::fake();
+
+        $this->signIn()->thread->subscribe()->addReply([
+            'body'    => 'foobar',
+            'user_id' => 1,
+        ]);
+
+        Notification::assertSentTo(auth()->User(), ThreadWasUpdated::class);
     }
 
     public function testAThreadBelongsToAChannel()
