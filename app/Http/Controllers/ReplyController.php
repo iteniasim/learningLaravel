@@ -6,6 +6,7 @@ use App\Reply;
 use App\Rules\SpamFree;
 use App\Thread;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ReplyController extends Controller
 {
@@ -22,6 +23,13 @@ class ReplyController extends Controller
 
     public function store($channel, Thread $thread)
     {
+        if (Gate::denies('create', new Reply)) {
+            return response(
+                'You are posting too frequently. Please take a break.',
+                429
+            );
+        }
+
         try {
             request()->validate([
                 'body' => ['required', new SpamFree],
@@ -37,11 +45,7 @@ class ReplyController extends Controller
             );
         }
 
-        if (request()->expectsJson()) {
-            return $reply->load('owner');
-        }
-
-        return back()->with('flash', 'Your Reply Was Published');
+        return $reply->load('owner'); // for ajax.
     }
 
     /**

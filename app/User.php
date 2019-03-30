@@ -66,4 +66,9 @@ class User extends Authenticatable implements MustVerifyEmail
             Carbon::now()
         );
     }
+
+    public function lastReply()
+    {
+        return $this->hasOne('App\Reply')->latest();
+    }
 }
