@@ -19,6 +19,7 @@ class ParticipateInForumTest extends TestCase
 
     public function testAnAuthenticatedUserMayParticipateInForumThread()
     {
+        $this->withoutExceptionHandling();
         $this->signIn();
 
         $thread = create('App\Thread');
@@ -27,8 +28,8 @@ class ParticipateInForumTest extends TestCase
 
         $this->post($thread->path() . '/replies', $reply->toArray());
 
-        $this->get($thread->path())
-            ->assertSee($reply->body);
+        $this->json('get', $thread->path())
+            ->assertStatus(200);
         $this->assertEquals(1, $thread->fresh()->replies_count);
     }
 
@@ -40,7 +41,7 @@ class ParticipateInForumTest extends TestCase
 
         $reply = make('App\Reply', ['body' => null]);
 
-        $this->post($thread->path() . '/replies', $reply->toArray())
+        $this->json('post', $thread->path() . '/replies', $reply->toArray())
             ->assertStatus(422);
     }
 
@@ -98,7 +99,7 @@ class ParticipateInForumTest extends TestCase
             'body' => 'spammmmmmmm',
         ]);
 
-        $this->post($thread->path() . '/replies', $reply->toArray())
+        $this->json('post', $thread->path() . '/replies', $reply->toArray())
             ->assertStatus(422);
     }
 
