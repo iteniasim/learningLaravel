@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Notifications\DatabaseNotification;
 use Tests\TestCase;
 
@@ -62,5 +61,21 @@ class NotificationsTest extends TestCase
         $this->delete("/profiles/{$user->name}/notifications/{$notificationId}");
 
         $this->assertCount(0, $user->fresh()->unreadNotifications);
+    }
+
+    public function testMentionedUsersInAReplyAreNotified()
+    {
+        $john = create('App\User', [
+            'name' => 'johndoe',
+        ]);
+        $this->signIn($john);
+
+        $reply = make('App\Reply', [
+            'body' => '@johndoe is mentioned.',
+        ]);
+
+        $this->post($reply->thread->path() . '/replies', $reply->toArray());
+
+        $this->assertCount(1, $john->notifications);
     }
 }
