@@ -109,7 +109,7 @@ class ParticipateInForumTest extends TestCase
         $thread = create('App\Thread');
         $reply  = create('App\Reply', ['user_id' => auth()->id()]);
 
-        $this->patch("/replies/{$reply->id}", [
+        $this->json('patch', "/replies/{$reply->id}", [
             'user_id' => auth()->id(),
             'body'    => 'spammmmmm',
         ])->assertStatus(422);

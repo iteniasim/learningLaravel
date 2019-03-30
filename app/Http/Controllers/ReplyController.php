@@ -29,39 +29,16 @@ class ReplyController extends Controller
         ])->load('owner');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Reply  $reply
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Reply $reply)
     {
         $this->authorize('update', $reply);
 
-        try {
-            request()->validate([
-                'body' => ['required', new SpamFree],
-            ]);
+        request()->validate(['body' => ['required', new SpamFree]]);
 
-            $reply->update(['body' => request('body')]);
-
-        } catch (\Exception $e) {
-            return response(
-                'Sorry, Your Reply Could Not Be Updated.',
-                422
-            );
-        }
+        $reply->update(['body' => request('body')]);
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Reply  $reply
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Reply $reply)
     {
         $this->authorize('update', $reply);
