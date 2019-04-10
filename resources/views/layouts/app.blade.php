@@ -13,10 +13,11 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script charset="utf-8">
-        window.App = {!! json_encode([
+        window.App = {!!json_encode([
                 'signedIn' => Auth::check(),
-                'user'=> Auth::user(),
+                'user' => Auth::user(),
             ]) !!};
+
     </script>
 
     <!-- Fonts -->
@@ -26,11 +27,13 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    @yield('header')
 </head>
 
 <body>
     <div id="app">
-    @include('layouts.nav')
+        @include('layouts.nav')
         <flash-component message="{{ session('flash') }}"></flash-component>
 
         <main class="py-4">

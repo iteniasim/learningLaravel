@@ -21,18 +21,16 @@
                             <select name="channel_id" id="channel_id" class="form-control" required>
                                 <option value="">Choose one...</option>
                                 @foreach ($channels as $channel)
-                                <option value="{{ $channel->id }}"
-                                    {{ old('channel_id') == $channel->id ? 'selected' : '' }}>{{ $channel->name }}</option>
+                                <option value="{{ $channel->id }}" {{ old('channel_id') == $channel->id ? 'selected' : '' }}>{{ $channel->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group">
-                            <lable for="title">Title:</lable>
-                            <input type="text" name="title" class="form-control" id="title" value="{{ old('title') }}"
-                                required>
+                            Title:
+                            <input type="text" name="title" class="form-control" id="title" value="{{ old('title') }}" required>
                         </div>
                         <div class="form-group">
-                            <lable for="body">Body:</lable>
+                            Body:
                             <textarea name="body" id="body" class="form-control" rows="5" required>{{ old('body') }}</textarea>
                         </div>
                         <div class="d-flex justify-content-end">
