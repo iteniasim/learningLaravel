@@ -83,7 +83,10 @@ class ReadThreadsTest extends TestCase
         create('App\Reply', ['thread_id' => $threadWithTwoReplies->id], 2);
 
         $response = $this->getJson('threads?popular=1')->json();
-        $this->assertEquals([3, 2, 0], array_column($response, 'replies_count'));
+
+        // dd($response);
+
+        $this->assertEquals([3, 2, 0], array_column($response['data'], 'replies_count'));
     }
 
     public function testAUserCanFilterThreadsByUnansweredThreads()
@@ -93,6 +96,6 @@ class ReadThreadsTest extends TestCase
         $reply               = create('App\Reply', ['thread_id' => $threadWithReplies->id]);
 
         $response = $this->getJson('threads?unanswered=1')->json();
-        $this->assertCount(1, $response);
+        $this->assertCount(1, $response['data']);
     }
 }

@@ -3,7 +3,7 @@
         <div class="card-header">
             <div class="d-flex justify-content-between">
                 <div>
-                    <a href="{{ route('profile.show', $reply->owner) }}">{{ $reply->owner->name }}</a> said
+                    <a href="{{ route('profile', $reply->owner) }}">{{ $reply->owner->name }}</a> said
                     {{ $reply->created_at->diffForHumans() }}...
                 </div>
                 <div>

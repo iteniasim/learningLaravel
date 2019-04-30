@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('header')
-    <link href="{{ asset('css/vendor/jquery.atwho.css') }}" rel="stylesheet">
+<link href="{{ asset('css/vendor/jquery.atwho.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -16,7 +16,7 @@
                                 {{ $thread->title }}
                             </div>
                             <div>
-                                Posted by: <a href="{{ route('profile.show', $thread->owner) }}">{{
+                                Posted by: <a href="{{ route('profile', $thread->owner) }}">{{
                                     $thread->owner->name }}</a>
                             </div>
                         </div>
@@ -50,7 +50,7 @@
                     <div class="card-body">
                         This Thread was published at {{ $thread->created_at->diffForHumans() }}
                         by
-                        <a href="{{ route('profile.show', $thread->owner) }}">
+                        <a href="{{ route('profile', $thread->owner) }}">
                             {{ $thread->owner->name }}
                         </a>, and currently has <span v-text="repliesCount"></span>
                         {{ str_plural('comment',$thread->replies_count)}}.

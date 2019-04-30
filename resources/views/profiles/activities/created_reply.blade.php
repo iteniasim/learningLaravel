@@ -2,7 +2,7 @@
 
 @slot('heading')
 <div>
-    <a href="{{ route('profile.show', $activity->subject->owner->name) }}">
+    <a href="{{ route('profile', $activity->subject->owner->name) }}">
         {{ $activity->subject->owner->name }}
     </a>
     Replied to :
