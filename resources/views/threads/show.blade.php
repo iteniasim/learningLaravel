@@ -16,8 +16,13 @@
                                 {{ $thread->title }}
                             </div>
                             <div>
-                                Posted by: <a href="{{ route('profile', $thread->owner) }}">{{
-                                    $thread->owner->name }}</a>
+                                <a href="{{ route('profile', $thread->owner) }}" class="text-decoration-none">
+                                    <img src="{{ $thread->owner->avatar() }}" alt="{{ $thread->owner->name }}"
+                                        width="20" height="20" class="mr-1">
+                                    {{ $thread->owner->name }}
+                                </a>
+                                posted
+                                {{ $thread->created_at->diffForHumans() }}
                             </div>
                         </div>
                     </div>

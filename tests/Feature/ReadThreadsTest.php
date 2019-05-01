@@ -63,15 +63,6 @@ class ReadThreadsTest extends TestCase
             ->assertDontSee($threadNotByJohn->title);
     }
 
-    public function testAUserCanGetAllRepliesForAGivenThread()
-    {
-        $thread = create('App\Thread');
-        create('App\Reply', ['thread_id' => $thread->id], 20);
-        $response = $this->getJson($thread->path() . '/replies')->json();
-        $this->assertCount(10, $response['data']);
-        $this->assertEquals(20, $response['total']);
-    }
-
     public function testAUserCanFilterThreadsByPopularity()
     {
         $threadWithNoReplies = $this->thread;
@@ -97,5 +88,14 @@ class ReadThreadsTest extends TestCase
 
         $response = $this->getJson('threads?unanswered=1')->json();
         $this->assertCount(1, $response['data']);
+    }
+
+    public function testAUserCanGetAllRepliesForAGivenThread()
+    {
+        $thread = create('App\Thread');
+        create('App\Reply', ['thread_id' => $thread->id], 20);
+        $response = $this->getJson($thread->path() . '/replies')->json();
+        $this->assertCount(10, $response['data']);
+        $this->assertEquals(20, $response['total']);
     }
 }

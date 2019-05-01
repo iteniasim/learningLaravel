@@ -17,7 +17,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'avatar_path',
     ];
 
     /**
@@ -56,7 +56,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function visitedThreadCacheKey($thread)
     {
         return sprintf("users.%s.visits.%s", $this->id, $thread->id);
-
     }
 
     public function read($thread)
@@ -70,5 +69,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function lastReply()
     {
         return $this->hasOne('App\Reply')->latest();
+    }
+
+    public function avatar()
+    {
+        return asset($this->avatar_path ?: 'avatars/Default-avatar.jpg');
     }
 }
