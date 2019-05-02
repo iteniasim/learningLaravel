@@ -71,8 +71,8 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne('App\Reply')->latest();
     }
 
-    public function avatar()
+    public function getAvatarPathAttribute($avatar)
     {
-        return asset($this->avatar_path ?: 'avatars/Default-avatar.jpg');
+        return asset($avatar ?: 'images/avatars/default.png');
     }
 }

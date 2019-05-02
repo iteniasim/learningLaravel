@@ -34,6 +34,11 @@ Vue.component(
     require("./components/PaginatorComponent.vue").default
 );
 
+Vue.component(
+    "avatar-form",
+    require("./components/AvatarFormComponent.vue").default
+);
+
 Vue.component("thread-view", require("./pages/ThreadComponent.vue").default);
 
 /**

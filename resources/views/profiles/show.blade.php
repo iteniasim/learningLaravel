@@ -4,21 +4,8 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="">
-                <div class="h1">
-                    {{ $profileUser->name }}
-                </div>
-
-                @can('update', $profileUser)
-                <form action="{{ route('avatar', $profileUser) }}" method="post" enctype="multipart/form-data">
-                    @csrf
-                    <input type="file" name="avatar">
-                    <div class="form-group">
-                        <button type="Submit" class="btn btn-primary">Add New Avatar</button>
-                    </div>
-                </form>
-                @endcan
-                <img src="{{ asset($profileUser->avatar_path) }}" width="50" height="50">
+            <div>
+                <avatar-form :user="{{ $profileUser }}"></avatar-form>
             </div>
             <hr>
             @forelse ($activities as $date => $activity)

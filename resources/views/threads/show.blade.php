@@ -17,8 +17,8 @@
                             </div>
                             <div>
                                 <a href="{{ route('profile', $thread->owner) }}" class="text-decoration-none">
-                                    <img src="{{ $thread->owner->avatar() }}" alt="{{ $thread->owner->name }}"
-                                        width="20" height="20" class="mr-1">
+                                    <img src="{{ $thread->owner->avatar_path }}" alt="{{ $thread->owner->name }}"
+                                        width="25" height="25" class="mr-1">
                                     {{ $thread->owner->name }}
                                 </a>
                                 posted
