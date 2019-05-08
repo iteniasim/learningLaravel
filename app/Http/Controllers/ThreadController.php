@@ -6,6 +6,7 @@ use App\Channel;
 use App\Filters\ThreadFilters;
 use App\Rules\SpamFree;
 use App\Thread;
+use App\Trending;
 use Illuminate\Http\Request;
 
 class ThreadController extends Controller
@@ -16,7 +17,7 @@ class ThreadController extends Controller
         $this->middleware('auth')->except(['index', 'show']);
     }
 
-    public function index(Channel $channel, ThreadFilters $filters)
+    public function index(Channel $channel, ThreadFilters $filters, Trending $trending)
     {
         $threads = $this->getThreads($channel, $filters);
 
@@ -24,7 +25,11 @@ class ThreadController extends Controller
             return $threads;
         }
 
-        return view('threads.index', compact('threads'));
+        return view('threads.index', [
+            'threads'  => $threads,
+            'trending' => $trending->get(),
+        ]);
+
     }
 
     public function create()
@@ -49,11 +54,13 @@ class ThreadController extends Controller
         return redirect($thread->path())->with('flash', 'Your Thread Was Published');
     }
 
-    public function show($channel, Thread $thread)
+    public function show($channel, Thread $thread, Trending $trending)
     {
         if (auth()->check()) {
             auth()->user()->read($thread);
         }
+
+        $trending->push($thread);
 
         return view('threads.show', compact('thread'));
     }
