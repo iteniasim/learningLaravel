@@ -33,6 +33,9 @@
         <div class="card-body">
             <div>{{ $thread->body }}</div>
         </div>
+        <div class="card-footer">
+            {{ $thread->visits }} Visits
+        </div>
     </div>
 </div>
 @empty Threa are no threads for this channel. @endforelse
