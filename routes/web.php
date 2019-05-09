@@ -43,3 +43,7 @@ Route::get('/profiles/{user}/notifications/', 'UserNotificationController@index'
 Route::get('/api/users', 'Api\UsersController@index');
 
 Route::post('/api/users/{user}/avatar', 'Api\UserAvatarController@store')->name('avatar');
+
+Route::get('/{user}/notices', 'NoticeController@index')->name('notice.index');
+Route::get('/{user}/notices/create', 'NoticeController@create')->name('notice.create');
+Route::post('/{user}/notices', 'NoticeController@store')->name('notice.store');

@@ -44,6 +44,15 @@
 
                 </li>
 
+                @auth
+                <li class="nav-item">
+                    <a class="nav-link" href="/{{ auth()->user()->name }}/notices">Notices</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/{{ auth()->user()->name }}/notices/create">Create Notice</a>
+                </li>
+                @endauth
+
             </ul>
 
             <!-- Right Side Of Navbar -->
