@@ -15,4 +15,14 @@ class Channel extends Model
     {
         return $this->hasMany('App\Thread');
     }
+
+    public function users()
+    {
+        return $this->hasMany('App\User');
+    }
+
+    public function notices()
+    {
+        return $this->hasMany('App\Notice');
+    }
 }

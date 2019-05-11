@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Notice;
+use App\Notifications\YouHaveANotice;
 use App\Rules\SpamFree;
+use App\User;
 use Illuminate\Http\Request;
 
 class NoticeController extends Controller
@@ -37,7 +39,7 @@ class NoticeController extends Controller
      */
     public function store($user)
     {
-        request()->validate([
+        $attributes = request()->validate([
             'title'          => ['required', new SpamFree],
             'body'           => ['required', new SpamFree],
             'channel_id'     => 'required|exists:channels,id',
@@ -51,8 +53,14 @@ class NoticeController extends Controller
             'title'          => request('title'),
             'body'           => request('body'),
         ]);
-        return redirect($notice->path())->with('flash', 'Your Notice Was Posted');
 
+        $users = User::where('channel_id', $notice->channel_id)->get();
+
+        foreach ($users as $user) {
+            $user->notify(new YouHaveANotice($notice));
+        }
+
+        return redirect($notice->path())->with('flash', 'Your Notice Was Posted');
     }
 
     /**

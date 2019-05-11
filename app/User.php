@@ -17,7 +17,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'avatar_path',
+        'channel_id', 'name', 'email', 'password', 'avatar_path',
     ];
 
     /**
@@ -51,6 +51,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function activity()
     {
         return $this->hasMany('App\Activity');
+    }
+
+    public function channel()
+    {
+        return $this->belongsTo('App\Channel');
     }
 
     public function visitedThreadCacheKey($thread)

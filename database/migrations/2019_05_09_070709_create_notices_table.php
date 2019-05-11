@@ -19,7 +19,7 @@ class CreateNoticesTable extends Migration
             $table->unsignedBigInteger('channel_id');
             $table->unsignedInteger('recipient_type');
             $table->string('title');
-            $table->string('body');
+            $table->text('body');
             $table->timestamps();
         });
     }
