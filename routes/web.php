@@ -26,8 +26,11 @@ Route::get('/threads/{channel}', 'ThreadController@index')->name('threads.ch.ind
 
 Route::get('/threads/{channel}/{thread}/replies', 'ReplyController@index');
 Route::post('/threads/{channel}/{thread}/replies', 'ReplyController@store')->name('replies.store');
+
 Route::delete('replies/{reply}', 'ReplyController@destroy')->name('replies.destroy');
 Route::patch('replies/{reply}', 'ReplyController@update')->name('replies.update');
+
+Route::post('replies/{reply}/best', 'BestReplyController@store')->name('best-reply.store');
 
 Route::post('/threads/{channel}/{thread}/subscription', 'SubscriptionController@store')->middleware('auth');
 Route::delete('/threads/{channel}/{thread}/subscription', 'SubscriptionController@destroy')->middleware('auth');
