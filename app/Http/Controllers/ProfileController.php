@@ -11,7 +11,7 @@ class ProfileController extends Controller
     {
         return view('profiles.show', [
             'profileUser' => $user,
-            'activities' => Activity::feed($user),
+            'activities'  => Activity::feed($user),
         ]);
     }
 }

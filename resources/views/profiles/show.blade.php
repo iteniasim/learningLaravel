@@ -5,9 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div>
-                <img src="/{{ $profileUser->avatar_path }}" width="50" height="50" class="mr-1" />
-
-                {{-- <avatar-form :user="{{ $profileUser }}"></avatar-form> --}}
+                <avatar-form :user="{{ $profileUser }}"></avatar-form>
             </div>
             <hr>
             @forelse ($activities as $date => $activity)

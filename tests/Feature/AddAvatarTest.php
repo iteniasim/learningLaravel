@@ -2,11 +2,10 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Tests\TestCase;
 
 class AddAvatar extends TestCase
 {
@@ -21,7 +20,7 @@ class AddAvatar extends TestCase
     {
         $this->signIn();
         $this->json('POST', 'api/users/' . auth()->id() . '/avatar', [
-            'avatar' => 'not-an-image'
+            'avatar' => 'not-an-image',
         ])->assertStatus(422);
     }
 
@@ -32,10 +31,10 @@ class AddAvatar extends TestCase
         Storage::fake('public');
 
         $this->json('POST', 'api/users/' . auth()->id() . '/avatar', [
-            'avatar' => $file = UploadedFile::fake()->image('avatar.jpg')
+            'avatar' => $file = UploadedFile::fake()->image('avatar.jpg'),
         ]);
 
-        $this->assertEquals(asset('avatars/' . $file->hashName()), auth()->user()->avatar_path);
+        $this->assertEquals(asset('storage/avatars/' . $file->hashName()), auth()->user()->avatar_path);
 
         Storage::disk('public')->assertExists('avatars/' . $file->hashName());
     }

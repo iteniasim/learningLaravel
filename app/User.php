@@ -78,6 +78,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getAvatarPathAttribute($avatar)
     {
-        return asset($avatar ?: 'images/avatars/default.png');
+        return asset($avatar ? 'storage/' . $avatar : 'images/avatars/default.png');
     }
 }
