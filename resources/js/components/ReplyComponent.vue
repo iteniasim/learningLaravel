@@ -1,5 +1,5 @@
 <template>
-  <div :id="'reply-'+data.id" class="card">
+  <div :id="'reply-'+data.id" class="card" :class="isBest ? 'border-success': ''">
     <div class="card-header">
       <div class="d-flex justify-content-between">
         <div>
@@ -25,14 +25,15 @@
       </div>
       <div v-else v-html="body"></div>
     </div>
-    <div v-if="canUpdate">
-      <div class="card-footer d-flex justify-content-between">
+    <div class="card-footer d-flex justify-content-between">
+      <div v-if="authorize('updateReply', reply)">
         <div>
           <button class="btn btn-secondary btn-sm" @click="editing = true">Edit</button>
-        </div>
-        <div>
           <button class="btn btn-danger btn-sm" @click="destroy">Delete</button>
         </div>
+      </div>
+      <div>
+        <button class="btn btn-outline-dark btn-sm" @click="markBestReply" v-show="!isBest">Best</button>
       </div>
     </div>
   </div>
@@ -48,7 +49,10 @@ export default {
   data() {
     return {
       editing: false,
-      body: this.data.body
+      id: this.data.id,
+      body: this.data.body,
+      isBest: this.data.isBest,
+      reply: this.data
     };
   },
 
@@ -57,21 +61,21 @@ export default {
   },
 
   computed: {
-    signedIn() {
-      return window.App.signedIn;
-    },
-    canUpdate() {
-      return this.authorize(user => this.data.owner.id == window.App.user.id);
-    },
     ago() {
       return moment(this.data.created_at).fromNow() + "...";
     }
   },
 
+  created() {
+    window.events.$on("best-reply-selected", id => {
+      this.isBest = id === this.id;
+    });
+  },
+
   methods: {
     update() {
       axios
-        .patch("/replies/" + this.data.id, {
+        .patch("/replies/" + this.id, {
           body: this.body
         })
         .catch(error => {
@@ -85,8 +89,12 @@ export default {
     },
 
     destroy() {
-      axios.delete("/replies/" + this.data.id);
-      this.$emit("deleted", this.data.id);
+      axios.delete("/replies/" + this.id);
+      this.$emit("deleted", this.id);
+    },
+    markBestReply() {
+      axios.post("/replies/" + this.id + "/best");
+      window.events.$emit("best-reply-selected", this.id);
     }
   }
 };

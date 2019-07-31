@@ -3172,11 +3172,6 @@ __webpack_require__.r(__webpack_exports__);
       });
     }
   },
-  computed: {
-    signedIn: function signedIn() {
-      return window.App.signedIn;
-    }
-  },
   mounted: function mounted() {
     $("#body").atwho({
       at: "@",
@@ -3384,6 +3379,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3391,32 +3387,32 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       editing: false,
-      body: this.data.body
+      id: this.data.id,
+      body: this.data.body,
+      isBest: this.data.isBest,
+      reply: this.data
     };
   },
   components: {
     "favourite-component": _FavouriteComponent_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   computed: {
-    signedIn: function signedIn() {
-      return window.App.signedIn;
-    },
-    canUpdate: function canUpdate() {
-      var _this = this;
-
-      return this.authorize(function (user) {
-        return _this.data.owner.id == window.App.user.id;
-      });
-    },
     ago: function ago() {
       return moment__WEBPACK_IMPORTED_MODULE_1___default()(this.data.created_at).fromNow() + "...";
     }
+  },
+  created: function created() {
+    var _this = this;
+
+    window.events.$on("best-reply-selected", function (id) {
+      _this.isBest = id === _this.id;
+    });
   },
   methods: {
     update: function update() {
       var _this2 = this;
 
-      axios.patch("/replies/" + this.data.id, {
+      axios.patch("/replies/" + this.id, {
         body: this.body
       })["catch"](function (error) {
         flash(error.response.data, "danger");
@@ -3428,8 +3424,12 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     destroy: function destroy() {
-      axios["delete"]("/replies/" + this.data.id);
-      this.$emit("deleted", this.data.id);
+      axios["delete"]("/replies/" + this.id);
+      this.$emit("deleted", this.id);
+    },
+    markBestReply: function markBestReply() {
+      axios.post("/replies/" + this.id + "/best");
+      window.events.$emit("best-reply-selected", this.id);
     }
   }
 });
@@ -57903,7 +57903,11 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "card", attrs: { id: "reply-" + _vm.data.id } },
+    {
+      staticClass: "card",
+      class: _vm.isBest ? "border-success" : "",
+      attrs: { id: "reply-" + _vm.data.id }
+    },
     [
       _c("div", { staticClass: "card-header" }, [
         _c("div", { staticClass: "d-flex justify-content-between" }, [
@@ -57985,41 +57989,54 @@ var render = function() {
           : _c("div", { domProps: { innerHTML: _vm._s(_vm.body) } })
       ]),
       _vm._v(" "),
-      _vm.canUpdate
-        ? _c("div", [
-            _c(
-              "div",
-              { staticClass: "card-footer d-flex justify-content-between" },
-              [
-                _c("div", [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-secondary btn-sm",
-                      on: {
-                        click: function($event) {
-                          _vm.editing = true
-                        }
+      _c("div", { staticClass: "card-footer d-flex justify-content-between" }, [
+        _vm.authorize("updateReply", _vm.reply)
+          ? _c("div", [
+              _c("div", [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary btn-sm",
+                    on: {
+                      click: function($event) {
+                        _vm.editing = true
                       }
-                    },
-                    [_vm._v("Edit")]
-                  )
-                ]),
+                    }
+                  },
+                  [_vm._v("Edit")]
+                ),
                 _vm._v(" "),
-                _c("div", [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-danger btn-sm",
-                      on: { click: _vm.destroy }
-                    },
-                    [_vm._v("Delete")]
-                  )
-                ])
-              ]
-            )
-          ])
-        : _vm._e()
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-danger btn-sm",
+                    on: { click: _vm.destroy }
+                  },
+                  [_vm._v("Delete")]
+                )
+              ])
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _c("div", [
+          _c(
+            "button",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: !_vm.isBest,
+                  expression: "!isBest"
+                }
+              ],
+              staticClass: "btn btn-outline-dark btn-sm",
+              on: { click: _vm.markBestReply }
+            },
+            [_vm._v("Best")]
+          )
+        ])
+      ])
     ]
   )
 }
@@ -70305,6 +70322,22 @@ var app = new Vue({
 
 /***/ }),
 
+/***/ "./resources/js/authorizations.js":
+/*!****************************************!*\
+  !*** ./resources/js/authorizations.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var user = window.App.user;
+module.exports = {
+  updateReply: function updateReply(reply) {
+    return reply.user_id === user.id;
+  }
+};
+
+/***/ }),
+
 /***/ "./resources/js/bootstrap.js":
 /*!***********************************!*\
   !*** ./resources/js/bootstrap.js ***!
@@ -70364,11 +70397,23 @@ if (token) {
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
-Vue.prototype.authorize = function (handler) {
-  var user = window.App.user;
-  return user ? handler(user) : false;
+var authorizations = __webpack_require__(/*! ./authorizations */ "./resources/js/authorizations.js");
+
+Vue.prototype.authorize = function () {
+  if (!window.App.signedIn) return false;
+
+  for (var _len = arguments.length, params = new Array(_len), _key = 0; _key < _len; _key++) {
+    params[_key] = arguments[_key];
+  }
+
+  if (typeof params[0] === "string") {
+    return authorizations[params[0]](params[1]);
+  }
+
+  return params[0](window.App.user);
 };
 
+Vue.prototype.signedIn = window.App.signedIn;
 window.events = new Vue();
 
 window.flash = function (message) {

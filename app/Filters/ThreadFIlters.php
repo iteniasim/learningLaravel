@@ -24,6 +24,5 @@ class ThreadFilters extends Filters
     public function unanswered()
     {
         return $this->builder->where('replies_count', 0);
-
     }
 }
