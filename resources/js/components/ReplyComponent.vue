@@ -1,14 +1,14 @@
 <template>
-  <div :id="'reply-'+data.id" class="card" :class="isBest ? 'border-success': ''">
+  <div :id="'reply-'+reply.id" class="card" :class="isBest ? 'border-success': ''">
     <div class="card-header">
       <div class="d-flex justify-content-between">
         <div>
-          <a :href="'/profiles/'+data.owner.name">{{ data.owner.name }}</a>
+          <a :href="'/profiles/'+reply.owner.name">{{ reply.owner.name }}</a>
           said
           <span v-text="ago"></span>
         </div>
         <div v-if="signedIn">
-          <favourite-component :reply="data"></favourite-component>
+          <favourite-component :reply="reply"></favourite-component>
         </div>
       </div>
     </div>
@@ -25,15 +25,23 @@
       </div>
       <div v-else v-html="body"></div>
     </div>
-    <div class="card-footer d-flex justify-content-between">
-      <div v-if="authorize('updateReply', reply)">
+
+    <div
+      class="card-footer d-flex justify-content-between"
+      v-if="authorize('owns', reply) || authorize('owns',reply.thread)"
+    >
+      <div v-if="authorize('owns', reply)">
         <div>
           <button class="btn btn-secondary btn-sm" @click="editing = true">Edit</button>
           <button class="btn btn-danger btn-sm" @click="destroy">Delete</button>
         </div>
       </div>
       <div>
-        <button class="btn btn-outline-dark btn-sm" @click="markBestReply" v-show="!isBest">Best</button>
+        <button
+          class="btn btn-outline-dark btn-sm"
+          @click="markBestReply"
+          v-if="authorize('owns', reply.thread)"
+        >Best</button>
       </div>
     </div>
   </div>
@@ -44,15 +52,14 @@
 import FavouriteComponent from "./FavouriteComponent.vue";
 import moment from "moment";
 export default {
-  props: ["data"],
+  props: ["reply"],
 
   data() {
     return {
       editing: false,
-      id: this.data.id,
-      body: this.data.body,
-      isBest: this.data.isBest,
-      reply: this.data
+      id: this.reply.id,
+      body: this.reply.body,
+      isBest: this.reply.isBest
     };
   },
 
@@ -62,7 +69,7 @@ export default {
 
   computed: {
     ago() {
-      return moment(this.data.created_at).fromNow() + "...";
+      return moment(this.reply.created_at).fromNow() + "...";
     }
   },
 

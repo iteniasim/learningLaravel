@@ -38,4 +38,19 @@ class BestReplyTest extends TestCase
 
         $this->assertFalse($replies[1]->fresh()->isBest());
     }
+
+    public function testIfABestReplyIsDeletedThenTheBestReplyColumnOfTheRelatedThreadIsNulled()
+    {
+        $this->signIn();
+
+        $reply = create('App\Reply', ['user_id' => auth()->id()]);
+
+        $reply->thread->markBestReply($reply);
+
+        $this->assertEquals($reply->thread->best_reply_id, $reply->id);
+
+        $this->deleteJson(route('replies.destroy', $reply));
+
+        $this->assertNull($reply->thread->fresh()->best_reply_id);
+    }
 }
