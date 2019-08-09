@@ -58,7 +58,7 @@ class ThreadController extends Controller
         return redirect($thread->path())->with('flash', 'Your Thread Was Published');
     }
 
-    public function show($channel, Thread $thread, Trending $trending)
+    public function show(Channel $channel, Thread $thread, Trending $trending)
     {
         if (auth()->check()) {
             auth()->user()->read($thread);
