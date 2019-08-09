@@ -6,8 +6,13 @@
 
     <paginator-component :dataSet="dataSet" @changed="fetch"></paginator-component>
 
-    <div>
-      <new-reply-component @created="add"></new-reply-component>
+    <div class="mt-4">
+      <div
+        class="text-center"
+        v-if="$parent.locked"
+      >Thread has been locked. No more replies allowed.</div>
+
+      <new-reply-component @created="add" v-else></new-reply-component>
     </div>
   </div>
 </template>

@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <button :class="classes" @click="subscribe">Subscribe</button>
-  </div>
+  <button :class="classes" @click="subscribe" v-text="this.active?'Unsubscribe':'Subscribe'"></button>
 </template>
 
 
@@ -23,7 +21,9 @@ export default {
 
   methods: {
     subscribe() {
-      axios[this.active ? "delete" : "post"](location.pathname + "/subscription");
+      axios[this.active ? "delete" : "post"](
+        location.pathname + "/subscription"
+      );
       this.active = !this.active;
     }
   }

@@ -3285,6 +3285,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -3457,8 +3462,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["status"],
   data: function data() {
@@ -3546,15 +3549,22 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["initialRepliesCount"],
+  props: ["thread"],
   components: {
     "replies-component": _components_RepliesComponent_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     "subscribe-button": _components_SubscribeButtonComponent_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
-      repliesCount: this.initialRepliesCount
+      repliesCount: this.thread.replies_count,
+      locked: this.thread.locked
     };
+  },
+  methods: {
+    toggleLock: function toggleLock() {
+      axios.patch("/locked-threads/" + this.thread.id);
+      this.locked = !this.locked;
+    }
   }
 });
 
@@ -57881,7 +57891,18 @@ var render = function() {
         on: { changed: _vm.fetch }
       }),
       _vm._v(" "),
-      _c("div", [_c("new-reply-component", { on: { created: _vm.add } })], 1)
+      _c(
+        "div",
+        { staticClass: "mt-4" },
+        [
+          _vm.$parent.locked
+            ? _c("div", { staticClass: "text-center" }, [
+                _vm._v("Thread has been locked. No more replies allowed.")
+              ])
+            : _c("new-reply-component", { on: { created: _vm.add } })
+        ],
+        1
+      )
     ],
     2
   )
@@ -58070,11 +58091,13 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("button", { class: _vm.classes, on: { click: _vm.subscribe } }, [
-      _vm._v("Subscribe")
-    ])
-  ])
+  return _c("button", {
+    class: _vm.classes,
+    domProps: {
+      textContent: _vm._s(this.active ? "Unsubscribe" : "Subscribe")
+    },
+    on: { click: _vm.subscribe }
+  })
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -70342,6 +70365,9 @@ module.exports = {
   owns: function owns(model) {
     var prop = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "user_id";
     return model[prop] === user.id;
+  },
+  isAdmin: function isAdmin() {
+    return ["JohnDoe"].includes(user.name);
   }
 };
 

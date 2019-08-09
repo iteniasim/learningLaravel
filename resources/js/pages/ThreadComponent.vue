@@ -3,7 +3,7 @@ import RepliesComponentVue from "../components/RepliesComponent.vue";
 import SubscribeButtonComponentVue from "../components/SubscribeButtonComponent.vue";
 
 export default {
-  props: ["initialRepliesCount"],
+  props: ["thread"],
 
   components: {
     "replies-component": RepliesComponentVue,
@@ -12,8 +12,16 @@ export default {
 
   data() {
     return {
-      repliesCount: this.initialRepliesCount
+      repliesCount: this.thread.replies_count,
+      locked: this.thread.locked
     };
+  },
+
+  methods: {
+    toggleLock() {
+      axios.patch("/locked-threads/" + this.thread.id);
+      this.locked = !this.locked;
+    }
   }
 };
 </script>

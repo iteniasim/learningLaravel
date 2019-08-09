@@ -8,6 +8,10 @@ class LockedThreadsController extends Controller
 {
     public function update(Thread $thread)
     {
-        $thread->lock();
+        if (!$thread->locked) {
+            $thread->update(['locked' => true]);
+        } else {
+            $thread->update(['locked' => false]);
+        }
     }
 }
