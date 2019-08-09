@@ -28,7 +28,7 @@
 
     <div
       class="card-footer d-flex justify-content-between"
-      v-if="authorize('owns', reply) || authorize('owns',reply.thread)"
+      v-if="authorize('owns', reply) || (authorize('owns', reply.thread) && !isBest)"
     >
       <div v-if="authorize('owns', reply)">
         <div>
@@ -40,7 +40,7 @@
         <button
           class="btn btn-outline-dark btn-sm"
           @click="markBestReply"
-          v-if="authorize('owns', reply.thread)"
+          v-if="authorize('owns', reply.thread) && !isBest"
         >Best</button>
       </div>
     </div>
