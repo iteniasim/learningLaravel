@@ -22,6 +22,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/threads/{channel}/{thread}', 'ThreadController@show')->name('threads.show');
 Route::delete('/threads/{channel}/{thread}', 'ThreadController@destroy')->name('threads.destroy');
 Route::resource('/threads', 'ThreadController')->except(['show', 'destroy']); //index create store edit update
+Route::get('threads/search', 'SearchController@show');
 Route::get('/threads/{channel}', 'ThreadController@index')->name('threads.ch.index');
 
 Route::get('/threads/{channel}/{thread}/replies', 'ReplyController@index');

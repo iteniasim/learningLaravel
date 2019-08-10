@@ -7,13 +7,29 @@
             {{ $threads->render() }}
         </div>
         <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <form action="/threads/search" method="get">
+                        <div class="form-group">
+                            Search:
+                            <input type="text" name="q" placeholder="Search something here...." class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <button type="Submit" class="btn btn-primary btn-block">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <br>
+
             @if (count($trending))
-            <div class="panel panel-default">
-                <div class="panel-heading">
+            <div class="card">
+                <div class="card-header">
                     Trending Threads
                 </div>
 
-                <div class="panel-body">
+                <div class="card-body">
                     <ul class="list-group">
                         @foreach ($trending as $thread)
                         <li class="list-group-item">

@@ -4,10 +4,12 @@ namespace App;
 
 use App\Events\ThreadReceivedNewReply;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Thread extends Model
 {
     use RecordsActivity;
+    use Searchable;
 
     protected $guarded = [];
 
