@@ -83,6 +83,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function isAdmin()
     {
-        return in_array($this->name, ['JohnDoe']);
+        return in_array($this->username, ['john_doe']);
     }
 }

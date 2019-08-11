@@ -5,6 +5,6 @@ module.exports = {
         return model[prop] === user.id;
     },
     isAdmin() {
-        return ["JohnDoe"].includes(user.name);
+        return ["john_doe"].includes(user.username);
     }
 };
