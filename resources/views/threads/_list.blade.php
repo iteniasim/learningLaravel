@@ -17,7 +17,7 @@
                     </div>
                     <div>
                         Posted By:
-                        <a href="{{ route('profile', $thread->owner->name) }}" class="text-decoration-none">
+                        <a href="{{ route('profile', $thread->owner) }}" class="text-decoration-none">
                             {{ $thread->owner->name }}
                         </a>
                     </div>

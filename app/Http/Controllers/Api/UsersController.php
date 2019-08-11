@@ -13,6 +13,6 @@ class UsersController extends Controller
         $search = request('name');
         return User::where('name', 'like', "$search%")
             ->take(5)
-            ->pluck('name');
+            ->pluck('username');
     }
 }

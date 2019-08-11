@@ -16,8 +16,10 @@ use Illuminate\Support\Str;
  */
 
 $factory->define(User::class, function (Faker $faker) {
+    $name = $faker->name;
     return [
-        'name'              => $faker->name,
+        'name'              => $name,
+        'username'          => Str::snake($name),
         'channel_id'        => function () {
             return factory('App\Channel')->create()->id;
         },

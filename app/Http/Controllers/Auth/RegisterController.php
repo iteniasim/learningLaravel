@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -67,6 +68,7 @@ class RegisterController extends Controller
         return User::create([
             'channel_id' => $data['channel_id'],
             'name'       => $data['name'],
+            'username'   => Str::snake($data['name']),
             'email'      => $data['email'],
             'password'   => Hash::make($data['password']),
         ]);
