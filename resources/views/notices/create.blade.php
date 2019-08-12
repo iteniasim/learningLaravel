@@ -3,7 +3,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <form action="/{{ $user }}/notices" method="POST">
+            <form action="{{ route('notice.index', auth()->user()) }}" method="POST">
                 @csrf
                 <div class="form-group">
                     <label for="channel_id">To</label>

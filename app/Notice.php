@@ -10,7 +10,7 @@ class Notice extends Model
 
     public function path()
     {
-        return '/' . auth()->user()->name . '/notices';
+        return route('notice.index', auth()->user());
     }
 
     public function owner()
