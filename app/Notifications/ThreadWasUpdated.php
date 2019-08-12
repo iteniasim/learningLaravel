@@ -46,7 +46,7 @@ class ThreadWasUpdated extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('New reply has been added in your ' . $this->reply->replyOwnerThreadRelationship() . ' thread!')
+            ->subject('New reply has been added in your thread!')
             ->line($this->reply->owner->name . ' replied to ' . $this->thread->title)
             ->action('Link To The Reply', url($this->reply->path()))
             ->line('Thank you for using our application!');

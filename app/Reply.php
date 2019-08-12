@@ -77,12 +77,4 @@ class Reply extends Model
     {
         return $this->isBest();
     }
-
-    public function replyOwnerThreadRelationship()
-    {
-        if ($this->owner->id === $this->thread->owner->id) {
-            return 'own';
-        }
-        return 'subscribed';
-    }
 }

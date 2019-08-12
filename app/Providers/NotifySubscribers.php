@@ -17,6 +17,6 @@ class NotifySubscribers
         $event->reply->thread->subscriptions
             ->where('user_id', '!=', $event->reply->user_id)
             ->each
-            ->notify($event->reply);
+            ->notify($event->reply); // this is the notify method in subscription model which then refrences the notify method from notifiable.
     }
 }
