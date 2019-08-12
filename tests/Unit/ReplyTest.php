@@ -56,4 +56,9 @@ class ReplyTest extends TestCase
 
         $this->assertTrue($reply->fresh()->isBest());
     }
+
+    // public function testAReplyKnowsIfItsCreatorIsTheThreadOwner()
+    // {
+
+    // }
 }

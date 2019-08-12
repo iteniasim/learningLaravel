@@ -31,7 +31,7 @@ class YouHaveANotice extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -43,8 +43,9 @@ class YouHaveANotice extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
+            ->subject('There was a new notice!')
+            ->line('Notice from ' . $this->notice->owner->name . ': ' . $this->notice->title)
+            ->action('GoTO Notice Page', url($this->notice->path()))
             ->line('Thank you for using our application!');
     }
 

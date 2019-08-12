@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ThreadWasUpdated extends Notification
+class ThreadWasUpdated extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -34,7 +34,7 @@ class ThreadWasUpdated extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -46,8 +46,9 @@ class ThreadWasUpdated extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
+            ->subject('New reply has been added in your ' . $this->reply->replyOwnerThreadRelationship() . ' thread!')
+            ->line($this->reply->owner->name . ' replied to ' . $this->thread->title)
+            ->action('Link To The Reply', url($this->reply->path()))
             ->line('Thank you for using our application!');
     }
 

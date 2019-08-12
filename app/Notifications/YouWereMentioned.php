@@ -30,7 +30,7 @@ class YouWereMentioned extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -42,8 +42,9 @@ class YouWereMentioned extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
+            ->subject('You were mentioned!')
+            ->line($this->reply->owner->name . ' mentioned you in ' . $this->reply->thread->title)
+            ->action('Notification Action', url($this->reply->path()))
             ->line('Thank you for using our application!');
     }
 

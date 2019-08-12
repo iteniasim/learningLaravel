@@ -45,6 +45,16 @@ class Thread extends Model
         return $this->belongsTo('App\User', 'user_id');
     }
 
+    public function channel()
+    {
+        return $this->belongsTo('App\Channel');
+    }
+
+    public function subscriptions()
+    {
+        return $this->hasMany('App\Subscription');
+    }
+
     public function addReply($reply)
     {
         $reply = $this->replies()->create($reply);
@@ -52,11 +62,6 @@ class Thread extends Model
         event(new ThreadReceivedNewReply($reply));
 
         return $reply;
-    }
-
-    public function channel()
-    {
-        return $this->belongsTo('App\Channel');
     }
 
     public function scopeFilter($query, $filters)
@@ -77,11 +82,6 @@ class Thread extends Model
         $this->subscriptions()
             ->where('user_id', $userId ?: auth()->id())
             ->delete();
-    }
-
-    public function subscriptions()
-    {
-        return $this->hasMany('App\Subscription');
     }
 
     public function getIsSubscribedToAttribute()
