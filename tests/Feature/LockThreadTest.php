@@ -34,7 +34,7 @@ class LockThread extends TestCase
 
     public function testAdminCanLockThreads()
     {
-        $this->signIn(factory('App\User')->states('administrator')->create());
+        $this->signIn($admin = factory('App\User')->states('administrator')->create());
 
         $thread = create('App\Thread', ['user_id' => auth()->id()]);
 

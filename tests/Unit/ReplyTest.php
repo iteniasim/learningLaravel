@@ -57,8 +57,18 @@ class ReplyTest extends TestCase
         $this->assertTrue($reply->fresh()->isBest());
     }
 
-    // public function testAReplyKnowsIfItsCreatorIsTheThreadOwner()
-    // {
+    public function testAReplyKnowsIfItsCreatorIsTheThreadOwner()
+    {
+        $this->signIn(create('App\User', ['id' => 5]));
 
-    // }
+        $thread = create('App\Thread', ['user_id' => 5]);
+
+        $ownerReply = create('App\Reply', ['user_id' => 5, 'thread_id' => $thread->id]);
+
+        $otherReply = create('App\Reply', ['thread_id' => $thread->id]);
+
+        $this->assertEquals('own', $ownerReply->replyOwnerThreadRelationship());
+        $this->assertEquals('subscribed', $otherReply->replyOwnerThreadRelationship());
+
+    }
 }

@@ -83,6 +83,6 @@ class Reply extends Model
         if ($this->owner->id === $this->thread->owner->id) {
             return 'own';
         }
-        return 'owned';
+        return 'subscribed';
     }
 }
