@@ -15,7 +15,7 @@ class NoticeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($user)
+    public function index(User $user)
     {
         $notices = Notice::latest()->get();
         return view('notices.index', compact('notices'));
@@ -26,7 +26,7 @@ class NoticeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($user)
+    public function create(User $user)
     {
         return view('notices.create', compact('user'));
     }

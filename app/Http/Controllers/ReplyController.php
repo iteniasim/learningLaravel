@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Channel;
 use App\Http\Requests\CreateReplyRequest;
 use App\Reply;
 use App\Rules\SpamFree;
@@ -16,12 +17,12 @@ class ReplyController extends Controller
         $this->middleware('auth')->except(['index']);
     }
 
-    public function index($channel, Thread $thread)
+    public function index(Channel $channel, Thread $thread)
     {
         return $thread->replies()->latest()->paginate(10);
     }
 
-    public function store($channelId, Thread $thread, CreateReplyRequest $request)
+    public function store(Channel $channel, Thread $thread, CreateReplyRequest $request)
     {
         if ($thread->locked) {
             return response('Thread is locked.', 422);
