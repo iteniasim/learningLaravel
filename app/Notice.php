@@ -10,7 +10,11 @@ class Notice extends Model
 
     public function path()
     {
-        return route('notice.index', auth()->user());
+        return "/{$this->owner->username}/notices";
+
+        // return route('notice.index', auth()->user());
+        // apparently route helper function cannot be used to calculate the path in the notifications and mails if they are queued
+        // so either just send mail or notification directly without queue or define the path explicitly yourself.
     }
 
     public function owner()

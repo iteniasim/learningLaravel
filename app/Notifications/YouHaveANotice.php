@@ -3,10 +3,11 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class YouHaveANotice extends Notification
+class YouHaveANotice extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -64,6 +65,5 @@ class YouHaveANotice extends Notification
         ];
     }
 }
-
 
 // this notification is sent directly from the controller.
