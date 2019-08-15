@@ -11,8 +11,11 @@ class MentionedUsersTest extends TestCase
 
     public function testMentionedUsersInAReplyAreNotified()
     {
+        $this->withoutExceptionHandling();
         $john = create('App\User', ['name' => 'johndoe']);
         $this->signIn($john);
+
+        $this->assertCount(0, $john->notifications);
 
         $reply = make('App\Reply', [
             'body' => '@johndoe is mentioned.',
@@ -20,6 +23,6 @@ class MentionedUsersTest extends TestCase
 
         $this->post($reply->thread->path() . '/replies', $reply->toArray());
 
-        $this->assertCount(1, $john->notifications);
+        $this->assertCount(1, $john->fresh()->notifications);
     }
 }
