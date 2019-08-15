@@ -46,7 +46,7 @@
 
                 @auth
                 <li class="nav-item">
-                    <a class="nav-link" href="/{{ auth()->user()->name }}/notices">Notices</a>
+                    <a class="nav-link" href="{{ route('notice.index',auth()->user()) }}">Notices</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('notice.create',auth()->user()) }}">Create Notice</a>
