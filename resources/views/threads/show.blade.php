@@ -30,7 +30,7 @@
                         {{ $thread->body }}
                     </div>
 
-                    @can('update', $thread)
+                    @can('delete', $thread)
                     <div class="d-flex justify-content-end pr-4">
                         <form method="POST" action="{{ $thread->path() }}">
                             @csrf
