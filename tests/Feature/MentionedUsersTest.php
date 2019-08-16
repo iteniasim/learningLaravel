@@ -12,13 +12,13 @@ class MentionedUsersTest extends TestCase
     public function testMentionedUsersInAReplyAreNotified()
     {
         $this->withoutExceptionHandling();
-        $john = create('App\User', ['name' => 'johndoe']);
+        $john = create('App\User', ['username' => 'john_doe']);
         $this->signIn($john);
 
         $this->assertCount(0, $john->notifications);
 
         $reply = make('App\Reply', [
-            'body' => '@johndoe is mentioned.',
+            'body' => '@john_doe is mentioned.',
         ]);
 
         $this->post($reply->thread->path() . '/replies', $reply->toArray());

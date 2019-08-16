@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\NewNoticePosted;
 use App\Notifications\YouHaveANotice;
+use App\User;
 
 class NotifyRelatedUsers
 {

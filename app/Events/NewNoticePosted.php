@@ -10,7 +10,7 @@ class NewNoticePosted
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    protected $notice;
+    public $notice;
 
     /**
      * Create a new event instance.
