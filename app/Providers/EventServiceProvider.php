@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\NewNoticePosted;
 use App\Events\ThreadReceivedNewReply;
 use App\Listeners\NotifyMentionedUsers;
+use App\Listeners\NotifyRelatedUsers;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -23,6 +25,9 @@ class EventServiceProvider extends ServiceProvider
         ThreadReceivedNewReply::class => [
             NotifyMentionedUsers::class,
             NotifySubscribers::class,
+        ],
+        NewNoticePosted::class        => [
+            NotifyRelatedUsers::class,
         ],
     ];
 

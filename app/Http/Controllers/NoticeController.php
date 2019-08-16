@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewNoticePosted;
 use App\Notice;
-use App\Notifications\YouHaveANotice;
 use App\Rules\SpamFree;
 use App\User;
 use Illuminate\Http\Request;
@@ -17,7 +17,15 @@ class NoticeController extends Controller
      */
     public function index(User $user)
     {
-        $notices = Notice::latest()->get();
+        if (auth()->user()->isAdmin()) {
+            $notices = Notice::latest()->get();
+        } else {
+            $notices = Notice::where([
+                ['channel_id', '=', auth()->user()->channel_id],
+                ['recipient_type', '=', auth()->user()->user_type],
+            ])->latest()->get();
+        }
+
         return view('notices.index', compact('notices'));
     }
 
@@ -54,11 +62,13 @@ class NoticeController extends Controller
             'body'           => request('body'),
         ]);
 
-        $users = User::where('channel_id', $notice->channel_id)->get();
+        event(new NewNoticePosted($notice));
 
-        foreach ($users as $user) {
-            $user->notify(new YouHaveANotice($notice));
-        }
+        // $users = User::where('channel_id', $notice->channel_id)->get();
+
+        // foreach ($users as $user) {
+        //     $user->notify(new YouHaveANotice($notice));
+        // }
 
         return redirect($notice->path())->with('flash', 'Your Notice Was Posted');
     }

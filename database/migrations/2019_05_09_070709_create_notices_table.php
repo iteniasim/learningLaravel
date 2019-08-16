@@ -17,7 +17,7 @@ class CreateNoticesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('channel_id');
-            $table->unsignedInteger('recipient_type');
+            $table->boolean('recipient_type');
             $table->string('title');
             $table->text('body');
             $table->timestamps();
