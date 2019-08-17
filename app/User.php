@@ -17,7 +17,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'channel_id', 'name', 'username', 'email', 'password', 'avatar_path',
+        'channel_id', 'name', 'username', 'email', 'password', 'avatar_path', 'user_type', 'blocked',
     ];
 
     /**
@@ -36,6 +36,8 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'user_type'         => 'boolean',
+        'blocked'           => 'boolean',
     ];
 
     public function getRouteKeyName()

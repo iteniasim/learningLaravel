@@ -53,3 +53,8 @@ Route::get('/{user}/notices/create', 'NoticeController@create')->name('notice.cr
 Route::post('/{user}/notices', 'NoticeController@store')->name('notice.store')->middleware('admin');
 
 Route::patch('locked-threads/{thread}', 'LockedThreadsController@update')->name('locked-threads.update')->middleware('admin');
+
+Route::get('/admin/users', 'AdminController@show')->name('admin');
+Route::patch('/admin/users/{id}/type', 'AdminController@type')->name('user.type');
+Route::patch('/admin/users/{id}', 'AdminController@update')->name('user.block');
+Route::delete('/admin/users/{id}', 'AdminController@destroy')->name('user.destroy');
