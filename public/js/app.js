@@ -8027,7 +8027,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.alert-flash {\r\n  position: fixed;\r\n  bottom: 25px;\r\n  right: 25px;\n}\r\n", ""]);
+exports.push([module.i, "\n.alert-flash {\n  position: fixed;\n  z-index: 999;\n  bottom: 25px;\n  right: 25px;\n}\n", ""]);
 
 // exports
 

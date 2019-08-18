@@ -17,7 +17,7 @@ class CreateReplyRequest extends FormRequest
      */
     public function authorize()
     {
-        return Gate::allows('create', new Reply());
+        return Gate::allows('create', Reply::class);
     }
 
     /**

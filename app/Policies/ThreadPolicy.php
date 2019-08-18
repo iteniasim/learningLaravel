@@ -30,7 +30,16 @@ class ThreadPolicy
      */
     public function create(User $user)
     {
-        //
+        if (auth()->user()->email_verified_at && !auth()->user()->blocked) {
+            return true;
+        } else {
+            if (!auth()->user()->email_verified_at) {
+                dd('i should not reach here');
+                $this->deny('You must first confirm your email address.');
+            } elseif (auth()->user()->blocked) {
+                $this->deny('Your account has been blocked. Contact administrator for further information.');
+            }
+        }
     }
 
     /**
