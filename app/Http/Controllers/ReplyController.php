@@ -24,6 +24,10 @@ class ReplyController extends Controller
 
     public function store(Channel $channel, Thread $thread, CreateReplyRequest $request)
     {
+        if (auth()->user()->blocked) {
+            return response('Your account has been blocked. Contact administrator for further information.', 422);
+        }
+
         if ($thread->locked) {
             return response('Thread is locked.', 422);
         }
