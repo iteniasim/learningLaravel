@@ -30,8 +30,7 @@ class CreateThreadsTest extends TestCase
         $thread = make('App\Thread');
 
         return $this->post('/threads', $thread->toArray())
-            ->assertRedirect('/threads')
-            ->assertSessionHas('flash', 'You must first confirm your email address.');
+            ->assertStatus(403);
     }
 
     public function testAnAuthenticatedUserCanCreateNewThreads()
