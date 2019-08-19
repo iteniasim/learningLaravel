@@ -28,9 +28,14 @@ class ReplyController extends Controller
             return response('Your account has been blocked. Contact administrator for further information.', 422);
         }
 
+        if (!auth()->user()->email_verified_at) {
+            return response('You must first confirm your email address.', 422);
+        }
+
         if ($thread->locked) {
             return response('Thread is locked.', 422);
         }
+
         return $thread->addReply([
             'body'    => request('body'),
             'user_id' => auth()->id(),
