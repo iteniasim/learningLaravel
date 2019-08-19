@@ -34,9 +34,8 @@
                         </div>
                         <div class="form-group">
                             Body:
-                            {{-- <textarea name="body" id="body" class="form-control" rows="5" required>{{ old('body') }}</textarea>
-                            --}}
-                            <wysiwyg-editor name='body'></wysiwyg-editor>
+                            <textarea name="body" id="body" class="form-control" rows="5"
+                                required>{{ old('body') }}</textarea>
                         </div>
                         <div class="d-flex justify-content-end">
                             <div class="form-group">
