@@ -26,8 +26,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body trix-content">
-                        {!! $thread->body !!}
+                    <div class="card-body">
+                        {{ $thread->body }}
                     </div>
 
                     @can('delete', $thread)

@@ -31,8 +31,8 @@
             </div>
         </div>
         <div class="card-body">
-            <div class="trix-content">
-                {!! $thread->body !!}
+            <div>
+                {{ $thread->body }}
             </div>
         </div>
         <div class="card-footer">
