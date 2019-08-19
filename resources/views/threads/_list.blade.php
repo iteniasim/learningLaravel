@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="card-body">
-            <div>
+            <div class="trix-content">
                 {!! $thread->body !!}
             </div>
         </div>

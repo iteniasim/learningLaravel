@@ -26,7 +26,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body trix-content">
                         {!! $thread->body !!}
                     </div>
 
